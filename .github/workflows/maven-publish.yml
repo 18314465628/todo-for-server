@@ -1,8 +1,9 @@
 name: Build and Release
 
 on:
-  release:
-    types: [created]
+  push:
+    tags:
+      - 'v*'  # 当推送 v 开头的标签时触发
   workflow_dispatch:  # 允许手动触发
 
 jobs:
@@ -38,19 +39,31 @@ jobs:
       run: |
         ./package.bat
         
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v3
+    - name: List Files
+      run: |
+        dir
+        echo "Current directory content:"
+        dir /s /b
+        
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: todo-reminder
-        path: todo-reminder.zip
+        tag_name: ${{ github.ref_name }}
+        release_name: Release ${{ github.ref_name }}
+        draft: false
+        prerelease: false
         
     - name: Upload Release Asset
-      if: github.event_name == 'release'  # 只在发布时运行
+      if: startsWith(github.ref, 'refs/tags/')
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./todo-reminder.zip
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ github.workspace }}/todo-reminder.zip
         asset_name: todo-reminder.zip
         asset_content_type: application/zip
