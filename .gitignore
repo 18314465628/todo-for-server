@@ -1,0 +1,25 @@
+# Maven
+target/
+*.jar
+*.war
+*.ear
+*.class
+
+# IDE
+.idea/
+*.iml
+.settings/
+.project
+.classpath
+
+# Database
+*.db
+*.db-journal
+*.db.backup
+
+# Logs
+*.log
+
+# OS specific
+.DS_Store
+Thumbs.db
