@@ -38,6 +38,7 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <compilerArgument>-Xlint:none</compilerArgument>
                 </configuration>
             </plugin>
             <plugin>
@@ -64,6 +65,8 @@
                                     <mainClass>com.todo.Main</mainClass>
                                 </transformer>
                             </transformers>
+                            <finalName>${project.artifactId}</finalName>
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
                         </configuration>
                     </execution>
                 </executions>
@@ -82,7 +85,7 @@
                         <configuration>
                             <headerType>console</headerType>
                             <outfile>target/todo-reminder.exe</outfile>
-                            <jar>target/${project.artifactId}-${project.version}-shaded.jar</jar>
+                            <jar>target/${project.artifactId}.jar</jar>
                             <errTitle>Todo Reminder</errTitle>
                             <classPath>
                                 <mainClass>com.todo.Main</mainClass>
